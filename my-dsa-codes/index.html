@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DSA Programs</title>
+
+  <!-- Prism CSS for syntax highlighting -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+  />
+
+  <!-- Custom stylesheet (for styling) -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>DSA Programs</h1>
+
+    <!-- Dropdown to pick which program's code to display -->
+    <div class="dropdown-container">
+      <label for="experimentSelect">Select the program to display:</label>
+      <select id="experimentSelect" onchange="showCode()">
+        <option value="infixToPostfix">1) Infix-to-Postfix</option>
+        <option value="evalPrefix">2) Evaluation of Prefix</option>
+        <option value="msgQueueSystem">3) Message Queueing System</option>
+        <option value="polyMultLinkedList">4) Multiply Polynomials (Linked List)</option>
+        <option value="queueCircularList">5) Queue of Integers (Circular List)</option>
+      </select>
+    </div>
+
+    <!-- Code block with a floating Copy button -->
+    <div class="code-wrapper">
+      <div class="copy-button" onclick="copyCode()">Copy</div>
+      <pre class="code-block">
+<code id="codeBlock" class="language-c"></code>
+      </pre>
+    </div>
+  </div>
+
+  <!-- Prism JS for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <!-- Our main script with code snippets and logic -->
+  <script src="script.js"></script>
+</body>
+</html>
