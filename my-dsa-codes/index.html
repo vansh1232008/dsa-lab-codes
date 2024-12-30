@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>DSA Programs</title>
+  <title>DSA Lab Programs</title>
 
   <!-- Prism CSS for syntax highlighting -->
   <link
@@ -10,22 +10,27 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
   />
 
-  <!-- Custom stylesheet (for styling) -->
+  <!-- Custom stylesheet -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>DSA Programs</h1>
+    <h1>DSA Lab Programs (1 - 10)</h1>
 
     <!-- Dropdown to pick which program's code to display -->
     <div class="dropdown-container">
-      <label for="experimentSelect">Select the program to display:</label>
-      <select id="experimentSelect" onchange="showCode()">
-        <option value="infixToPostfix">1) Infix-to-Postfix</option>
-        <option value="evalPrefix">2) Evaluation of Prefix</option>
-        <option value="msgQueueSystem">3) Message Queueing System</option>
-        <option value="polyMultLinkedList">4) Multiply Polynomials (Linked List)</option>
-        <option value="queueCircularList">5) Queue of Integers (Circular List)</option>
+      <label for="programSelect">Select the program:</label>
+      <select id="programSelect" onchange="showCode()">
+        <option value="code1">1) Infix to Postfix</option>
+        <option value="code2">2) Evaluation of Prefix</option>
+        <option value="code3">3) Message Queueing System</option>
+        <option value="code4">4) Multiply Polynomials (Linked List)</option>
+        <option value="code5">5) Queue of Integers (Circular List)</option>
+        <option value="code6">6) Double Hashing</option>
+        <option value="code7">7) Priority Queue (Min-Heap)</option>
+        <option value="code8">8) Expression Tree</option>
+        <option value="code9">9) Binary Tree</option>
+        <option value="code10">10) Binary Search Tree</option>
       </select>
     </div>
 
@@ -40,7 +45,8 @@
 
   <!-- Prism JS for syntax highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <!-- Our main script with code snippets and logic -->
+  
+  <!-- Our script with the code snippets and logic -->
   <script src="script.js"></script>
 </body>
 </html>
