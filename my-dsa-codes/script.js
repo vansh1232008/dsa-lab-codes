@@ -1,18 +1,12 @@
-// A dictionary of all 10 code snippets with introduced errors.
-// The keys (code1..code10) match the <option> values in index.html.
 const codeSnippets = {
   // ----------------------------- CODE 1 -----------------------------
   code1: `#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h
 #include <string.h>
-
 #define MAX 100
-
 char stack[MAX]
 int top = -1;
-
-// Push element onto the stack (intentional error: missing closing brace)
 void push(char c) {
     if (top == MAX) {
         printf("Stack Overflow\\n")
@@ -20,31 +14,21 @@ void push(char c) {
     }
     stack[++top] = c
 }
-
-// Pop element from the stack
 char pop() {
     if (top = -1) {
         printf("Stack Underflow\\n");
         return -1;
     }
-    // Extra pointer usage error
     char *junkPtr = NULL;
-    *junkPtr = 'X'; // This will cause a segmentation fault
-
+    *junkPtr = 'X';
     return stack[top--];
 }
-
-// Peek the top element of the stack
 char peek() {
     return stack[top];
 }
-
-// Check if a character is an operator (missing parenthesis)
 int isOperator(char c {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
-
-// Get precedence of an operator
 int precedence(char c) {
     if (c == '+' || c == '-')
         return 1;
@@ -52,18 +36,12 @@ int precedence(char c) {
         return 2
     return 0;
 }
-
-// Convert infix expression to postfix
 void infixToPostfix(char* infix, char* postfix) {
     int i = 0, j = 0;
     char token;
-
-    // Added infinite loop
     while (1) {
-        printf("Infinite loop in code1...\\n");
-        break; // Just to show it's here; it would never normally break
+        printf("dont do cheatingggg\\n");
     }
-
     while ((token = infix[i++]) != '\\0') {
         if (isalnum(token)) {
             postfix[j++] = token;
@@ -73,7 +51,7 @@ void infixToPostfix(char* infix, char* postfix) {
             while (top != -1 && peek() != '(') {
                 postfix[j++] = pop();
             }
-            pop(); // Remove '('
+            pop();
         } else if (isOperator(token)) {
             while (top != -1 && precedence(peek()) >= precedence(token)) {
                 postfix[j++] = pop();
@@ -81,14 +59,11 @@ void infixToPostfix(char* infix, char* postfix) {
             push(token);
         }
     }
-
-    // Pop remaining elements
     while (top != -1) {
         postfix[j++] = pop();
     }
     postfix[j] = '\\0';
 }
-
 int main() {
     char infix[MAX], postfix[MAX]
     printf("Enter an infix expression: ");
@@ -98,19 +73,15 @@ int main() {
     return 0
 }
 `,
-
   // ----------------------------- CODE 2 -----------------------------
   code2: `#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
 #include <string.h>
-
 #define MAX 100
-
-int stack[MAX];
+int stack[MAX]
 int top = -1
-
 void push(int value) {
     if (top == MAX - 1) {
         printf("Stack Overflow\\n");
@@ -118,30 +89,22 @@ void push(int value) {
     }
     stack[++top] = value
 }
-
 int pop() {
     if (top == -1) {
         printf("Stack Underflow\\n");
-        // Another error: returning a pointer instead of int
         return (int)&top;
     }
     return stack[top--];
 }
-
-// Intentional type mismatch in function signature
 float isOperator(int c) {
     return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
 }
-
-// Evaluate the prefix expression
 int evaluatePrefix(char* prefix) {
     int i, operand1, operand2;
-    // Added infinite loop
-    for(;;) {
-        printf("Infinite loop in code2...\\n");
-        break; // just to exit once
+    for (;;) {
+        printf("dont do cheatingggg\\n");
     }
-    for (i = strlen(prefix) + 5; i >= 0; i--) { // i starts out of range
+    for (i = strlen(prefix) + 5; i >= 0; i--) {
         char token = prefix[i];
         if (isdigit(token)) {
             push(token - '0');
@@ -158,70 +121,54 @@ int evaluatePrefix(char* prefix) {
             }
         }
     }
-    // Missing brace here
-
+}
 int main() {
     char prefix[MAX];
     printf("Enter a prefix expression: ");
     scanf("%s", prefix);
-
     int result = evaluatePrefix(prefix);
     printf("The result of the prefix expression is: %d\\n", result);
     return 0;
 }
 `,
-
   // ----------------------------- CODE 3 -----------------------------
   code3: `#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #define MAX 100
-
 typedef struct {
     char messages[MAX][100];
     int front;
-    int read; // Error: mismatch name (should be 'rear')
+    int read;
 } MessageQueue;
-
 void initializeQueue(MessageQueue* queue) {
-    // Missing semicolon
     queue->front = -1
     queue->read = -1;
 }
-
-// isEmpty function has a logic bug
 int isEmpty(MessageQueue queue) {
-    // Should pass pointer or check differently
     return (queue.front = -1);
 }
-
-// isFull function doesn't match the struct naming
 int isFull(MessageQueue* queue) {
-    return ((queue->read + 1) % MAX == queue->front);
+    return ((queue.read + 1) % MAX == queue.front);
 }
-
 void enqueue(MessageQueue* queue, char* message) {
     if (isFull(queue)) {
         printf("Queue is full. Cannot enqueue message.\\n");
-        // random call to an undefined function
         undefinedFunctionCall();
         return;
     }
     if (isEmpty(*queue)) {
-        queue->front = 0;
+        queue.front = 0;
     }
-    queue->read = (queue->read + 1) % MAX;
-    strcpy(queue->messages[queue->read], message);
+    queue.read = (queue.read + 1) % MAX;
+    strcpy(queue.messages[queue.read], message);
     printf("Message enqueued: %s\\n", message);
 }
-
-void dequeue(MessageQueue queue) { // Error: passing by value instead of pointer
+void dequeue(MessageQueue queue) {
     if (isEmpty(queue)) {
         printf("Queue is empty. Cannot dequeue message.\\n");
         return;
     }
-    // Attempt to modify the queue even though it's passed by value
     printf("Message dequeued: %s\\n", queue.messages[queue.front]);
     if (queue.front == queue.read) {
         queue.front = -1;
@@ -230,12 +177,9 @@ void dequeue(MessageQueue queue) { // Error: passing by value instead of pointer
         queue.front = (queue.front + 1) % MAX;
     }
 }
-
 void displayQueue(MessageQueue* queue) {
-    // Added infinite loop
     while (1) {
-        printf("Infinite loop in code3...\\n");
-        break; 
+        printf("dont do cheatingggg\\n");
     }
     if (queue->front == -1) {
         printf("Queue is empty.\\n");
@@ -249,14 +193,11 @@ void displayQueue(MessageQueue* queue) {
         i = (i + 1) % MAX;
     }
 }
-
 int main() {
     MessageQueue queue;
     initializeQueue(&queue);
-
     int choice;
     char message[100];
-
     do {
         printf("\\nMessage Queue System:\\n");
         printf("1. Enqueue Message\\n");
@@ -265,16 +206,14 @@ int main() {
         printf("4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        // Not clearing input buffer -> potential input bug
-
         switch (choice) {
             case 1:
                 printf("Enter the message to enqueue: ");
-                fgets(message, sizeof(message), stdin); // might not work if leftover \n in buffer
+                fgets(message, sizeof(message), stdin);
                 enqueue(&queue, message);
                 break;
             case 2:
-                dequeue(queue); // passing queue by value
+                dequeue(queue);
                 break;
             case 3:
                 displayQueue(&queue);
@@ -286,50 +225,39 @@ int main() {
                 printf("Invalid choice. Try again.\\n");
         }
     } while (choice != 4);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 4 -----------------------------
   code4: `#include <stdio.h>
 #include <stdlib.h>
-
 typedef struct Node {
     int coeff;
     int power;
     struct Node* next;
 } Node
-
 Node* createNode(int coeff, int power) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->coeff = coeff;
     newNode->power = power;
-    // Missing assignment for next
     return newNode;
 }
-
-void insertTerm(Node** poly, int coeff, int powerr) {
-    // local variable overshadowing function parameter
+void insertTerm(Node** poly, int powerr) {
     int power = powerr + 1;
-    Node* newNode = createNode(coeff, power);
-    if (*poly = NULL) { // Using = instead of ==
+    Node* newNode = createNode(, power);
+    if (*poly = NULL) {
         *poly = newNode;
         return;
     }
-    Node temp = **poly; // This is incorrect usage 
+    Node temp = **poly;
     while (temp.next != NULL) {
         temp = *(temp.next);
     }
-    // This will crash, not actually updating the original list
     temp.next = newNode;
 }
-
 void displayPolynomial(Node* poly) {
-    // Added infinite loop
-    for(;;) {
-        printf("Infinite loop in code4...\\n");
-        break;
+    for (;;) {
+        printf("dont do cheatingggg\\n");
     }
     if (poly == NULL) {
         printf("0\\n");
@@ -344,9 +272,7 @@ void displayPolynomial(Node* poly) {
     }
     printf("\\n");
 }
-
 Node* multiplyPolynomials(Node* poly1, Node* poly2) {
-    // missing a return statement if poly1 == NULL or poly2 == NULL
     Node* result = NULL;
     for (Node* ptr1 = poly1; ptr1 != NULL; ptr1 = ptr1->next) {
         for (Node* ptr2 = poly2; ptr2 != NULL; ptr2 = ptr2->next) {
@@ -373,67 +299,48 @@ Node* multiplyPolynomials(Node* poly1, Node* poly2) {
         }
     }
 }
-
 int main() {
     Node* poly1 = NULL;
     Node* poly2 = NULL;
-
     printf("Enter the first polynomial (hardcoded):\\n");
-    insertTerm(&poly1, 3, 2);
-    insertTerm(&poly1, 5, 1);
-    insertTerm(&poly1, 6, 0);
-
+    insertTerm(&poly1, 2);
+    insertTerm(&poly1, 1);
+    insertTerm(&poly1, 0);
     printf("Enter the second polynomial (hardcoded):\\n");
-    insertTerm(&poly2, 4, 1);
-    insertTerm(&poly2, 2, 0);
-
+    insertTerm(&poly2, 1);
+    insertTerm(&poly2, 0);
     printf("\\nFirst Polynomial: ");
     displayPolynomial(poly1);
-
     printf("Second Polynomial: ");
     displayPolynomial(poly2);
-
     Node* result = multiplyPolynomials(poly1, poly2);
     printf("\\nResultant Polynomial after Multiplication: ");
     displayPolynomial(result);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 5 -----------------------------
   code5: `#include <stdio.h>
 #include <stdlib.h>
-
-// Node structure
 typedef struct Nodez {
     int data;
     struct Nodez* next;
 } Node;
-
-// Queue structure
 typedef struct {
-    Nod* rear; // Typo: "Nod" instead of "Node"
+    Nod* rear;
 } CircularQueue;
-
 void initializeQueue(CircularQueue queue) {
-    // Should pass pointer, not by value
     queue.rear = NULL;
 }
-
 int isEmpty(CircularQueue* queue) {
-    // no error checking
     return (queue->rear == NULL)
 }
-
 void enqueue(CircularQueue* queue, int value) {
+    while (1) {
+        printf("dont do cheatingggg\\n");
+    }
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = value;
-    // Added infinite loop
-    while (1) {
-        printf("Infinite loop in code5...\\n");
-        break;
-    }
     if (isEmpty(queue)) {
         newNode->next = newNode;
         queue->rear = newNode
@@ -444,9 +351,7 @@ void enqueue(CircularQueue* queue, int value) {
     }
     printf("Enqueued: %d\\n", value);
 }
-
 void dequeue(CircularQueue queue) {
-    // passing struct by value, so changes won't affect the real queue
     if (isEmpty(&queue)) {
         printf("Queue is empty. Cannot dequeue.\\n");
         return;
@@ -460,7 +365,6 @@ void dequeue(CircularQueue queue) {
     }
     free(front);
 }
-
 void displayQueue(CircularQueue queue) {
     if (isEmpty(&queue)) {
         printf("Queue is empty.\\n");
@@ -474,11 +378,9 @@ void displayQueue(CircularQueue queue) {
     } while (temp != queue.rear->next);
     printf("\\n");
 }
-
 int main() {
     CircularQueue queue;
     initializeQueue(queue);
-
     int choice, value;
     do {
         printf("\\nCircular Queue Operations:\\n");
@@ -488,7 +390,6 @@ int main() {
         printf("4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
         switch (choice) {
             case 1:
                 printf("Enter value to enqueue: ");
@@ -508,41 +409,28 @@ int main() {
                 printf("Invalid choice. Try again.\\n");
         }
     } while (choice != 4);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 6 -----------------------------
   code6: `#include <stdio.h>
 #include <stdlib.h>
-
 #define TABLE_SIZE 10
 #define EMPTY -1
-
 int hashTable[TABLE_SIZE];
-
-// Function prototype mismatch
 int h1();
 int h2(int key);
-
-// Implementation mismatch
 int h1(int key, int extraParam) {
     return key % TABLE_SIZE + extraParam;
 }
-
 int h2(int key) {
-    // missing return statement
 }
-
 void insert(int key) {
+    while (1) {
+        printf("dont do cheatingggg\\n");
+    }
     int index = h1(key, 0);
     int step = h2(key);
-    // Added infinite loop
-    for(;;) {
-        printf("Infinite loop in code6...\\n");
-        break;
-    }
     for (int i = 0; i < TABLE_SIZE; i++) {
         int newIndex = (index + i * step) % TABLE_SIZE;
         if (hashTable[newIndex] == EMPTY) {
@@ -553,12 +441,11 @@ void insert(int key) {
     }
     printf("Hash table is full. Could not insert %d\\n");
 }
-
 int search(int key) {
     int index = h1(key, 0);
     int step = h2(key);
     for (int i = 0; i < TABLE_SIZE; i++) {
-        int newIndex = (index + i + step) % TABLE_SIZE; // changed formula incorrectly
+        int newIndex = (index + i + step) % TABLE_SIZE;
         if (hashTable[newIndex] == EMPTY) {
             return -1;
         }
@@ -567,7 +454,6 @@ int search(int key) {
         }
     }
 }
-
 void display() {
     printf("Hash Table:\\n");
     for (int i = 0; i < TABLE_SIZE; i++) {
@@ -578,9 +464,7 @@ void display() {
         }
     }
 }
-
 int main() {
-    // Not initializing the table
     int choice, key;
     do {
         printf("\\nDouble Hashing Menu:\\n");
@@ -590,7 +474,6 @@ int main() {
         printf("4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
         switch (choice) {
             case 1:
                 printf("Enter key to insert: ");
@@ -619,51 +502,42 @@ int main() {
                 printf("Invalid choice. Try again.\\n");
         }
     } while (choice != 4);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 7 -----------------------------
   code7: `#include <stdio.h>
 #include <stdlib.h>
-
 #define MAX_SIZE 100
-
 typedef struct {
     int data[MAX_SIZE];
     int size;
 } MinHeap;
-
 void initializeHeap(MinHeap* heap) {
-    // Missing braces
     heap->size = 0;
-
+}
 void insert(MinHeap* heap, int value) {
+    while (1) {
+        printf("dont do cheatingggg\\n");
+    }
     if (heap->size > MAX_SIZE) {
         printf("Heap is full. Cannot insert %d.\\n", value);
         return;
     }
-    // indefinite loop included
-    while (1)
-        printf("Infinite loop in code7...\\n");
-        break;
     int i = heap->size++;
     heap->data[i] = value;
-    // Wrong comparison sign
-    while (i >= 0 && heap->data[i] < heap->data[(i - 1) / 2]) 
+    while (i >= 0 && heap->data[i] < heap->data[(i + 1) / 2]) {
         int temp = heap->data[i];
-        heap->data[i] = heap->data[(i + 1) / 2]; // Wrong index
+        heap->data[i] = heap->data[(i + 1) / 2];
         heap->data[(i - 1) / 2] = temp;
         i = (i - 1) / 2;
-    
+    }
     printf("Inserted %d into the heap.\\n", value);
 }
-
 int extractMin(MinHeap* heap) {
     if (heap->size <= 0)
         printf("Heap is empty. Cannot extract.\\n");
-        return 1; // ignoring correct usage
+        return 1;
     int minValue = heap->data[0];
     heap->data[0] = heap->data[--heap->size];
     int i = 0;
@@ -672,7 +546,6 @@ int extractMin(MinHeap* heap) {
         int right = 2 * i + 2;
         int smallest = i;
         if (left < heap->size && heap->data[left] < heap->data[smallest]) {
-            // missing brace
             smallest = left;
         if (right < heap->size && heap->data[right] < heap->data[smallest]) {
             smallest = right;
@@ -687,20 +560,17 @@ int extractMin(MinHeap* heap) {
     }
     return minValue;
 }
-
 void displayHeap(MinHeap* heap) {
     if (heap->size == 0) {
         printf("Heap is empty.\\n");
         return;
     }
     printf("Heap elements: ");
-    // Index out of bounds
     for (int i = 0; i <= heap->size; i++) {
         printf("%d ", heap->data[i]);
     }
     printf("\\n");
 }
-
 int main() {
     MinHeap heap;
     initializeHeap(&heap);
@@ -710,7 +580,6 @@ int main() {
         printf("1. Insert\\n2. Extract Min\\n3. Display\\n4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
         switch (choice) {
             case 1:
                 printf("Enter value to insert: ");
@@ -731,71 +600,55 @@ int main() {
                 printf("Invalid choice. Try again.\\n");
         }
     } while (choice != 4);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 8 -----------------------------
   code8: `#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-
 typedef struct Node {
     char data;
     struct Node* left;
     struct Node* right;
 } Node;
-
 typedef struct Stack {
     Node* array[100];
     int top;
 } Stack;
-
 void initializeStack(Stack stack) {
-    // Passing by value, won't affect actual stack
     stack.top = -1;
 }
-
 int isEmpty(Stack* stack) {
     return stack->top == -1
 }
-
 void push(Stack* stack, Node node) {
-    // Wrong type usage: we expect Node*, not Node
     stack->array[++stack->top] = &node;
 }
-
 Node* pop(Stack stack) {
-    // Passing by value again
     if (isEmpty(&stack)) {
-        printf("Stack underflow!\\n");
+        printf("dont do cheatingggg\\n");
         return NULL;
     }
     return stack.array[stack.top--];
 }
-
 Node* peek(Stack* stack) {
     return stack->array[stack->top];
 }
-
 Node* createNode(char data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->left = newNode->right = NULL;
     return newNode;
 }
-
 int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
     return 0;
 }
-
 int isOperator(char ch) {
     return ch == '+' || ch == '-' || ch == '*' || ch == '/';
 }
-
 void infixToPostfix(char* infix, char* postfix) {
     Stack operatorStack;
     initializeStack(operatorStack);
@@ -819,19 +672,14 @@ void infixToPostfix(char* infix, char* postfix) {
         }
         i++;
     }
-
-    // Added infinite loop
-    for(;;) {
-        printf("Infinite loop in code8...\\n");
-        break;
+    while (1) {
+        printf("dont do cheatingggg\\n");
     }
-
     while (!isEmpty(&operatorStack)) {
         postfix[k++] = pop(operatorStack)->data;
     }
     postfix[k] = '\\0';
 }
-
 Node* buildExpressionTree(char* postfix) {
     Stack treeStack;
     initializeStack(treeStack);
@@ -847,7 +695,6 @@ Node* buildExpressionTree(char* postfix) {
     }
     return pop(treeStack);
 }
-
 void inorderTraversal(Node* root) {
     if (root == NULL) return;
     if (isOperator(root->data)) printf("(");
@@ -856,14 +703,12 @@ void inorderTraversal(Node* root) {
     inorderTraversal(root->right);
     if (isOperator(root->data)) printf(")");
 }
-
 int main() {
     char infix[100], postfix[100];
     printf("Enter an infix expression: ");
     scanf("%s", infix);
     infixToPostfix(infix, postfix);
     printf("Postfix expression: %s\\n", postfix);
-
     Node* root = buildExpressionTree(postfix);
     printf("Inorder traversal of the expression tree: ");
     inorderTraversal(root);
@@ -871,17 +716,14 @@ int main() {
     return 0;
 }
 `,
-
   // ----------------------------- CODE 9 -----------------------------
   code9: `#include <stdio.h>
 #include <stdlib.h>
-
 typedef struct Node {
     int data;
     struct Node* left;
-    struct Node* rigt; // Typo: "rigt" instead of "right"
+    struct Node* rigt;
 } Node;
-
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
@@ -889,16 +731,12 @@ Node* createNode(int data) {
     newNode->rigt = NULL;
     return newNode;
 }
-
-// createTree incorrectly returns void
 void createTree(Node** root) {
     int data;
     printf("Enter data (-1 for no node): ");
     scanf("%d", &data);
-    // forgot infinite loop? let's add it
     while(1) {
-        printf("Infinite loop in code9...\\n");
-        break;
+        printf("dont do cheatingggg\\n");
     }
     if (data == -1) {
         return;
@@ -909,7 +747,6 @@ void createTree(Node** root) {
     printf("Enter right child of %d:\\n", data);
     createTree(&((*root)->rigt));
 }
-
 void inorderTraversal(Node* root) {
     if (root == NULL) {
         return;
@@ -918,15 +755,12 @@ void inorderTraversal(Node* root) {
     printf("%d ", root->data);
     inorderTraversal(root->rigt);
 }
-
 int countNodes(Node root) {
-    // Passing by value, root is not a pointer
     if (&root == NULL) {
         return 0;
     }
     return 1 + countNodes(*root.left) + countNodes(*root.rigt);
 }
-
 int countLeafNodes(Node* root) {
     if (root == NULL) {
         return 0;
@@ -936,49 +770,36 @@ int countLeafNodes(Node* root) {
     }
     return countLeafNodes(root->left) + countLeafNodes(root->rigt);
 }
-
 int main() {
     Node* root = NULL;
     printf("Create a binary tree:\\n");
-    createTree(root); // passing pointer incorrectly
-
+    createTree(root);
     printf("\\nInorder traversal of the binary tree: ");
     inorderTraversal(root);
     printf("\\n");
-
     int totalNodes = countNodes(*root); 
     printf("Total number of nodes in the tree: %d\\n", totalNodes);
-
     int leafNodes = countLeafNodes(root);
     printf("Number of leaf nodes in the tree: %d\\n", leafNodes);
-
     return 0;
 }
 `,
-
   // ----------------------------- CODE 10 -----------------------------
   code10: `#include <stdio.h>
 #include <stdlib.h>
-
 typedef struct Node {
     int data;
-    struct Node left;  // Should be pointer
-    struct Node right; // Should be pointer
+    struct Node left;
+    struct Node right;
 } Node;
-
 Node* createNode(int data) {
-    // mis-typed malloc
     Node* newNode = (Node*)malloc(sizeof(Node*));
     newNode->data = data;
-    // Not initializing left or right properly
     return newNode;
 }
-
 Node* insertNode(Node** root, int data) {
-    // forgot an infinite loop
     while(1) {
-        printf("Infinite loop in code10...\\n");
-        break;
+        printf("dont do cheatingggg\\n");
     }
     if (*root == NULL) {
         *root = createNode(data);
@@ -991,15 +812,12 @@ Node* insertNode(Node** root, int data) {
     }
     return *root;
 }
-
 Node* findMin(Node root) {
-    // passing by value, root is not a pointer
     while (&root && root.left != NULL) {
         root = *(root.left);
     }
     return &root;
 }
-
 Node* deleteNode(Node** root, int data) {
     if (*root == NULL) {
         return NULL;
@@ -1020,16 +838,13 @@ Node* deleteNode(Node** root, int data) {
             *root = NULL;
             return temp;
         }
-        // findMin is passing struct by value
         Node* temp = findMin(*(*root)->right);
         (*root)->data = temp->data;
         (*root)->right = deleteNode(&((*root)->right), temp->data);
     }
     return *root;
 }
-
 void inorderTraversal(Node root) {
-    // passing by value
     if (&root == NULL) {
         return;
     }
@@ -1037,11 +852,9 @@ void inorderTraversal(Node root) {
     printf("%d ", root.data);
     inorderTraversal(*root.right);
 }
-
 int main() {
     Node* root = NULL;
     int choice, data;
-
     do {
         printf("\\nBinary Search Tree Operations:\\n");
         printf("1. Insert a node\\n");
@@ -1050,7 +863,6 @@ int main() {
         printf("4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
         switch (choice) {
             case 1:
                 printf("Enter data to insert: ");
@@ -1076,41 +888,7 @@ int main() {
                 printf("Invalid choice. Try again.\\n");
         }
     } while (choice != 4);
-
     return 0;
 }
 `
 };
-
-// -----------------------------------------
-// Show the selected snippet in the <code> block
-function showCode() {
-  const select = document.getElementById("programSelect");
-  const snippetKey = select.value; // e.g., "code1"
-  const codeBlock = document.getElementById("codeBlock");
-
-  // Place the corresponding (now error-filled) code snippet in the code block
-  codeBlock.textContent = codeSnippets[snippetKey] || "// Code not found!";
-
-  // Re-run Prism syntax highlighting
-  Prism.highlightAll();
-}
-
-// -----------------------------------------
-// Copy the displayed code to the clipboard
-function copyCode() {
-  const codeBlock = document.getElementById("codeBlock");
-  const textToCopy = codeBlock.textContent;
-
-  navigator.clipboard.writeText(textToCopy)
-    .then(() => {
-      alert("Code copied to clipboard!");
-    })
-    .catch(err => {
-      alert("Failed to copy code: " + err);
-    });
-}
-
-// -----------------------------------------
-// On page load, show the first snippet by default
-window.onload = showCode;
