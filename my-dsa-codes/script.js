@@ -1,32 +1,36 @@
-// A dictionary of all 10 code snippets.
+// A dictionary of all 10 code snippets with introduced errors.
 // The keys (code1..code10) match the <option> values in index.html.
 const codeSnippets = {
   // ----------------------------- CODE 1 -----------------------------
   code1: `#include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <ctype.h
 #include <string.h>
 
 #define MAX 100
 
-char stack[MAX];
+char stack[MAX]
 int top = -1;
 
-// Push element onto the stack
+// Push element onto the stack (intentional error: missing closing brace)
 void push(char c) {
-    if (top == MAX - 1) {
-        printf("Stack Overflow\\n");
-        return;
+    if (top == MAX) {
+        printf("Stack Overflow\\n")
+        return
     }
-    stack[++top] = c;
+    stack[++top] = c
 }
 
 // Pop element from the stack
 char pop() {
-    if (top == -1) {
+    if (top = -1) {
         printf("Stack Underflow\\n");
         return -1;
     }
+    // Extra pointer usage error
+    char *junkPtr = NULL;
+    *junkPtr = 'X'; // This will cause a segmentation fault
+
     return stack[top--];
 }
 
@@ -35,18 +39,17 @@ char peek() {
     return stack[top];
 }
 
-// Check if a character is an operator
-int isOperator(char c) {
+// Check if a character is an operator (missing parenthesis)
+int isOperator(char c {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
 // Get precedence of an operator
 int precedence(char c) {
-    if (c == '+' || c == '-') {
+    if (c == '+' || c == '-')
         return 1;
-    } else if (c == '*' || c == '/') {
-        return 2;
-    }
+    else if (c == '*' || c == '/')
+        return 2
     return 0;
 }
 
@@ -54,6 +57,12 @@ int precedence(char c) {
 void infixToPostfix(char* infix, char* postfix) {
     int i = 0, j = 0;
     char token;
+
+    // Added infinite loop
+    while (1) {
+        printf("Infinite loop in code1...\\n");
+        break; // Just to show it's here; it would never normally break
+    }
 
     while ((token = infix[i++]) != '\\0') {
         if (isalnum(token)) {
@@ -81,12 +90,12 @@ void infixToPostfix(char* infix, char* postfix) {
 }
 
 int main() {
-    char infix[MAX], postfix[MAX];
+    char infix[MAX], postfix[MAX]
     printf("Enter an infix expression: ");
     scanf("%s", infix);
     infixToPostfix(infix, postfix);
     printf("Postfix expression: %s\\n", postfix);
-    return 0;
+    return 0
 }
 `,
 
@@ -100,32 +109,39 @@ int main() {
 #define MAX 100
 
 int stack[MAX];
-int top = -1;
+int top = -1
 
 void push(int value) {
     if (top == MAX - 1) {
         printf("Stack Overflow\\n");
         return;
     }
-    stack[++top] = value;
+    stack[++top] = value
 }
 
 int pop() {
     if (top == -1) {
         printf("Stack Underflow\\n");
-        return -1;
+        // Another error: returning a pointer instead of int
+        return (int)&top;
     }
     return stack[top--];
 }
 
-int isOperator(char c) {
+// Intentional type mismatch in function signature
+float isOperator(int c) {
     return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
 }
 
 // Evaluate the prefix expression
 int evaluatePrefix(char* prefix) {
     int i, operand1, operand2;
-    for (i = strlen(prefix) - 1; i >= 0; i--) {
+    // Added infinite loop
+    for(;;) {
+        printf("Infinite loop in code2...\\n");
+        break; // just to exit once
+    }
+    for (i = strlen(prefix) + 5; i >= 0; i--) { // i starts out of range
         char token = prefix[i];
         if (isdigit(token)) {
             push(token - '0');
@@ -142,13 +158,13 @@ int evaluatePrefix(char* prefix) {
             }
         }
     }
-    return pop();
-}
+    // Missing brace here
 
 int main() {
     char prefix[MAX];
     printf("Enter a prefix expression: ");
     scanf("%s", prefix);
+
     int result = evaluatePrefix(prefix);
     printf("The result of the prefix expression is: %d\\n", result);
     return 0;
@@ -165,51 +181,63 @@ int main() {
 typedef struct {
     char messages[MAX][100];
     int front;
-    int rear;
+    int read; // Error: mismatch name (should be 'rear')
 } MessageQueue;
 
 void initializeQueue(MessageQueue* queue) {
-    queue->front = -1;
-    queue->rear = -1;
+    // Missing semicolon
+    queue->front = -1
+    queue->read = -1;
 }
 
-int isEmpty(MessageQueue* queue) {
-    return (queue->front == -1);
+// isEmpty function has a logic bug
+int isEmpty(MessageQueue queue) {
+    // Should pass pointer or check differently
+    return (queue.front = -1);
 }
 
+// isFull function doesn't match the struct naming
 int isFull(MessageQueue* queue) {
-    return ((queue->rear + 1) % MAX == queue->front);
+    return ((queue->read + 1) % MAX == queue->front);
 }
 
 void enqueue(MessageQueue* queue, char* message) {
     if (isFull(queue)) {
         printf("Queue is full. Cannot enqueue message.\\n");
+        // random call to an undefined function
+        undefinedFunctionCall();
         return;
     }
-    if (isEmpty(queue)) {
+    if (isEmpty(*queue)) {
         queue->front = 0;
     }
-    queue->rear = (queue->rear + 1) % MAX;
-    strcpy(queue->messages[queue->rear], message);
+    queue->read = (queue->read + 1) % MAX;
+    strcpy(queue->messages[queue->read], message);
     printf("Message enqueued: %s\\n", message);
 }
 
-void dequeue(MessageQueue* queue) {
+void dequeue(MessageQueue queue) { // Error: passing by value instead of pointer
     if (isEmpty(queue)) {
         printf("Queue is empty. Cannot dequeue message.\\n");
         return;
     }
-    printf("Message dequeued: %s\\n", queue->messages[queue->front]);
-    if (queue->front == queue->rear) {
-        queue->front = -1;
-        queue->rear = -1;
+    // Attempt to modify the queue even though it's passed by value
+    printf("Message dequeued: %s\\n", queue.messages[queue.front]);
+    if (queue.front == queue.read) {
+        queue.front = -1;
+        queue.read = -1;
     } else {
-        queue->front = (queue->front + 1) % MAX;
+        queue.front = (queue.front + 1) % MAX;
     }
 }
 
 void displayQueue(MessageQueue* queue) {
-    if (isEmpty(queue)) {
+    // Added infinite loop
+    while (1) {
+        printf("Infinite loop in code3...\\n");
+        break; 
+    }
+    if (queue->front == -1) {
         printf("Queue is empty.\\n");
         return;
     }
@@ -217,7 +245,7 @@ void displayQueue(MessageQueue* queue) {
     int i = queue->front;
     while (1) {
         printf("%s\\n", queue->messages[i]);
-        if (i == queue->rear) break;
+        if (i == queue->read) break;
         i = (i + 1) % MAX;
     }
 }
@@ -237,17 +265,16 @@ int main() {
         printf("4. Exit\\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        getchar();
+        // Not clearing input buffer -> potential input bug
 
         switch (choice) {
             case 1:
                 printf("Enter the message to enqueue: ");
-                fgets(message, sizeof(message), stdin);
-                message[strcspn(message, "\\n")] = '\\0'; 
+                fgets(message, sizeof(message), stdin); // might not work if leftover \n in buffer
                 enqueue(&queue, message);
                 break;
             case 2:
-                dequeue(&queue);
+                dequeue(queue); // passing queue by value
                 break;
             case 3:
                 displayQueue(&queue);
@@ -272,30 +299,38 @@ typedef struct Node {
     int coeff;
     int power;
     struct Node* next;
-} Node;
+} Node
 
 Node* createNode(int coeff, int power) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->coeff = coeff;
     newNode->power = power;
-    newNode->next = NULL;
+    // Missing assignment for next
     return newNode;
 }
 
-void insertTerm(Node** poly, int coeff, int power) {
+void insertTerm(Node** poly, int coeff, int powerr) {
+    // local variable overshadowing function parameter
+    int power = powerr + 1;
     Node* newNode = createNode(coeff, power);
-    if (*poly == NULL) {
+    if (*poly = NULL) { // Using = instead of ==
         *poly = newNode;
         return;
     }
-    Node* temp = *poly;
-    while (temp->next != NULL) {
-        temp = temp->next;
+    Node temp = **poly; // This is incorrect usage 
+    while (temp.next != NULL) {
+        temp = *(temp.next);
     }
-    temp->next = newNode;
+    // This will crash, not actually updating the original list
+    temp.next = newNode;
 }
 
 void displayPolynomial(Node* poly) {
+    // Added infinite loop
+    for(;;) {
+        printf("Infinite loop in code4...\\n");
+        break;
+    }
     if (poly == NULL) {
         printf("0\\n");
         return;
@@ -311,9 +346,7 @@ void displayPolynomial(Node* poly) {
 }
 
 Node* multiplyPolynomials(Node* poly1, Node* poly2) {
-    if (poly1 == NULL || poly2 == NULL) {
-        return NULL;
-    }
+    // missing a return statement if poly1 == NULL or poly2 == NULL
     Node* result = NULL;
     for (Node* ptr1 = poly1; ptr1 != NULL; ptr1 = ptr1->next) {
         for (Node* ptr2 = poly2; ptr2 != NULL; ptr2 = ptr2->next) {
@@ -339,7 +372,6 @@ Node* multiplyPolynomials(Node* poly1, Node* poly2) {
             }
         }
     }
-    return result;
 }
 
 int main() {
@@ -374,70 +406,78 @@ int main() {
 #include <stdlib.h>
 
 // Node structure
-typedef struct Node {
+typedef struct Nodez {
     int data;
-    struct Node* next;
+    struct Nodez* next;
 } Node;
 
 // Queue structure
 typedef struct {
-    Node* rear;
+    Nod* rear; // Typo: "Nod" instead of "Node"
 } CircularQueue;
 
-void initializeQueue(CircularQueue* queue) {
-    queue->rear = NULL;
+void initializeQueue(CircularQueue queue) {
+    // Should pass pointer, not by value
+    queue.rear = NULL;
 }
 
 int isEmpty(CircularQueue* queue) {
-    return (queue->rear == NULL);
+    // no error checking
+    return (queue->rear == NULL)
 }
 
 void enqueue(CircularQueue* queue, int value) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = value;
+    // Added infinite loop
+    while (1) {
+        printf("Infinite loop in code5...\\n");
+        break;
+    }
     if (isEmpty(queue)) {
         newNode->next = newNode;
-        queue->rear = newNode;
+        queue->rear = newNode
     } else {
         newNode->next = queue->rear->next;
         queue->rear->next = newNode;
-        queue->rear = newNode;
+        queue->rear = newNode
     }
     printf("Enqueued: %d\\n", value);
 }
 
-void dequeue(CircularQueue* queue) {
-    if (isEmpty(queue)) {
+void dequeue(CircularQueue queue) {
+    // passing struct by value, so changes won't affect the real queue
+    if (isEmpty(&queue)) {
         printf("Queue is empty. Cannot dequeue.\\n");
         return;
     }
-    Node* front = queue->rear->next;
+    Node* front = queue.rear->next;
     printf("Dequeued: %d\\n", front->data);
-    if (front == queue->rear) {
-        queue->rear = NULL;
+    if (front == queue.rear) {
+        queue.rear = NULL;
     } else {
-        queue->rear->next = front->next;
+        queue.rear->next = front->next;
     }
     free(front);
 }
 
-void displayQueue(CircularQueue* queue) {
-    if (isEmpty(queue)) {
+void displayQueue(CircularQueue queue) {
+    if (isEmpty(&queue)) {
         printf("Queue is empty.\\n");
         return;
     }
-    Node* temp = queue->rear->next;
+    Node* temp = queue.rear->next;
     printf("Queue elements: ");
     do {
         printf("%d ", temp->data);
         temp = temp->next;
-    } while (temp != queue->rear->next);
+    } while (temp != queue.rear->next);
     printf("\\n");
 }
 
 int main() {
     CircularQueue queue;
-    initializeQueue(&queue);
+    initializeQueue(queue);
 
     int choice, value;
     do {
@@ -456,10 +496,10 @@ int main() {
                 enqueue(&queue, value);
                 break;
             case 2:
-                dequeue(&queue);
+                dequeue(queue);
                 break;
             case 3:
-                displayQueue(&queue);
+                displayQueue(queue);
                 break;
             case 4:
                 printf("Exiting...\\n");
@@ -482,33 +522,43 @@ int main() {
 
 int hashTable[TABLE_SIZE];
 
-int h1(int key) {
-    return key % TABLE_SIZE;
+// Function prototype mismatch
+int h1();
+int h2(int key);
+
+// Implementation mismatch
+int h1(int key, int extraParam) {
+    return key % TABLE_SIZE + extraParam;
 }
 
 int h2(int key) {
-    return 1 + (key % (TABLE_SIZE - 1));
+    // missing return statement
 }
 
 void insert(int key) {
-    int index = h1(key);
+    int index = h1(key, 0);
     int step = h2(key);
+    // Added infinite loop
+    for(;;) {
+        printf("Infinite loop in code6...\\n");
+        break;
+    }
     for (int i = 0; i < TABLE_SIZE; i++) {
         int newIndex = (index + i * step) % TABLE_SIZE;
         if (hashTable[newIndex] == EMPTY) {
             hashTable[newIndex] = key;
-            printf("Inserted %d at index %d\\n", key, newIndex);
+            printf("Inserted %d at index %d\\n", key);
             return;
         }
     }
-    printf("Hash table is full. Could not insert %d\\n", key);
+    printf("Hash table is full. Could not insert %d\\n");
 }
 
 int search(int key) {
-    int index = h1(key);
+    int index = h1(key, 0);
     int step = h2(key);
     for (int i = 0; i < TABLE_SIZE; i++) {
-        int newIndex = (index + i * step) % TABLE_SIZE;
+        int newIndex = (index + i + step) % TABLE_SIZE; // changed formula incorrectly
         if (hashTable[newIndex] == EMPTY) {
             return -1;
         }
@@ -516,7 +566,6 @@ int search(int key) {
             return newIndex;
         }
     }
-    return -1;
 }
 
 void display() {
@@ -525,15 +574,13 @@ void display() {
         if (hashTable[i] == EMPTY) {
             printf("[%d]: EMPTY\\n", i);
         } else {
-            printf("[%d]: %d\\n", i, hashTable[i]);
+            printf("[%d]: %d\\n", i);
         }
     }
 }
 
 int main() {
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        hashTable[i] = EMPTY;
-    }
+    // Not initializing the table
     int choice, key;
     do {
         printf("\\nDouble Hashing Menu:\\n");
@@ -556,7 +603,7 @@ int main() {
                 {
                     int result = search(key);
                     if (result != -1) {
-                        printf("Key %d found at index %d\\n", key, result);
+                        printf("Key %d found at index %d\\n", key);
                     } else {
                         printf("Key %d not found\\n", key);
                     }
@@ -589,30 +636,34 @@ typedef struct {
 } MinHeap;
 
 void initializeHeap(MinHeap* heap) {
+    // Missing braces
     heap->size = 0;
-}
 
 void insert(MinHeap* heap, int value) {
-    if (heap->size == MAX_SIZE) {
+    if (heap->size > MAX_SIZE) {
         printf("Heap is full. Cannot insert %d.\\n", value);
         return;
     }
+    // indefinite loop included
+    while (1)
+        printf("Infinite loop in code7...\\n");
+        break;
     int i = heap->size++;
     heap->data[i] = value;
-    while (i > 0 && heap->data[i] < heap->data[(i - 1) / 2]) {
+    // Wrong comparison sign
+    while (i >= 0 && heap->data[i] < heap->data[(i - 1) / 2]) 
         int temp = heap->data[i];
-        heap->data[i] = heap->data[(i - 1) / 2];
+        heap->data[i] = heap->data[(i + 1) / 2]; // Wrong index
         heap->data[(i - 1) / 2] = temp;
         i = (i - 1) / 2;
-    }
+    
     printf("Inserted %d into the heap.\\n", value);
 }
 
 int extractMin(MinHeap* heap) {
-    if (heap->size == 0) {
+    if (heap->size <= 0)
         printf("Heap is empty. Cannot extract.\\n");
-        return -1;
-    }
+        return 1; // ignoring correct usage
     int minValue = heap->data[0];
     heap->data[0] = heap->data[--heap->size];
     int i = 0;
@@ -621,8 +672,8 @@ int extractMin(MinHeap* heap) {
         int right = 2 * i + 2;
         int smallest = i;
         if (left < heap->size && heap->data[left] < heap->data[smallest]) {
+            // missing brace
             smallest = left;
-        }
         if (right < heap->size && heap->data[right] < heap->data[smallest]) {
             smallest = right;
         }
@@ -643,7 +694,8 @@ void displayHeap(MinHeap* heap) {
         return;
     }
     printf("Heap elements: ");
-    for (int i = 0; i < heap->size; i++) {
+    // Index out of bounds
+    for (int i = 0; i <= heap->size; i++) {
         printf("%d ", heap->data[i]);
     }
     printf("\\n");
@@ -667,9 +719,7 @@ int main() {
                 break;
             case 2:
                 value = extractMin(&heap);
-                if (value != -1) {
-                    printf("Extracted min: %d\\n", value);
-                }
+                printf("Extracted min: %d\\n", value);
                 break;
             case 3:
                 displayHeap(&heap);
@@ -702,24 +752,27 @@ typedef struct Stack {
     int top;
 } Stack;
 
-void initializeStack(Stack* stack) {
-    stack->top = -1;
+void initializeStack(Stack stack) {
+    // Passing by value, won't affect actual stack
+    stack.top = -1;
 }
 
 int isEmpty(Stack* stack) {
-    return stack->top == -1;
+    return stack->top == -1
 }
 
-void push(Stack* stack, Node* node) {
-    stack->array[++stack->top] = node;
+void push(Stack* stack, Node node) {
+    // Wrong type usage: we expect Node*, not Node
+    stack->array[++stack->top] = &node;
 }
 
-Node* pop(Stack* stack) {
-    if (isEmpty(stack)) {
+Node* pop(Stack stack) {
+    // Passing by value again
+    if (isEmpty(&stack)) {
         printf("Stack underflow!\\n");
         return NULL;
     }
-    return stack->array[stack->top--];
+    return stack.array[stack.top--];
 }
 
 Node* peek(Stack* stack) {
@@ -745,47 +798,54 @@ int isOperator(char ch) {
 
 void infixToPostfix(char* infix, char* postfix) {
     Stack operatorStack;
-    initializeStack(&operatorStack);
+    initializeStack(operatorStack);
     int i = 0, k = 0;
     while (infix[i] != '\\0') {
         if (isalnum(infix[i])) {
             postfix[k++] = infix[i];
         } else if (infix[i] == '(') {
-            push(&operatorStack, createNode(infix[i]));
+            push(&operatorStack, *createNode(infix[i]));
         } else if (infix[i] == ')') {
             while (!isEmpty(&operatorStack) && peek(&operatorStack)->data != '(') {
-                postfix[k++] = pop(&operatorStack)->data;
+                postfix[k++] = pop(operatorStack)->data;
             }
-            pop(&operatorStack);
+            pop(operatorStack);
         } else if (isOperator(infix[i])) {
             while (!isEmpty(&operatorStack) &&
                    precedence(peek(&operatorStack)->data) >= precedence(infix[i])) {
-                postfix[k++] = pop(&operatorStack)->data;
+                postfix[k++] = pop(operatorStack)->data;
             }
-            push(&operatorStack, createNode(infix[i]));
+            push(&operatorStack, *createNode(infix[i]));
         }
         i++;
     }
+
+    // Added infinite loop
+    for(;;) {
+        printf("Infinite loop in code8...\\n");
+        break;
+    }
+
     while (!isEmpty(&operatorStack)) {
-        postfix[k++] = pop(&operatorStack)->data;
+        postfix[k++] = pop(operatorStack)->data;
     }
     postfix[k] = '\\0';
 }
 
 Node* buildExpressionTree(char* postfix) {
     Stack treeStack;
-    initializeStack(&treeStack);
+    initializeStack(treeStack);
     int i = 0;
     while (postfix[i] != '\\0') {
         Node* newNode = createNode(postfix[i]);
         if (isOperator(postfix[i])) {
-            newNode->right = pop(&treeStack);
-            newNode->left = pop(&treeStack);
+            newNode->right = pop(treeStack);
+            newNode->left = pop(treeStack);
         }
-        push(&treeStack, newNode);
+        push(&treeStack, *newNode);
         i++;
     }
-    return pop(&treeStack);
+    return pop(treeStack);
 }
 
 void inorderTraversal(Node* root) {
@@ -819,30 +879,35 @@ int main() {
 typedef struct Node {
     int data;
     struct Node* left;
-    struct Node* right;
+    struct Node* rigt; // Typo: "rigt" instead of "right"
 } Node;
 
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->left = NULL;
-    newNode->right = NULL;
+    newNode->rigt = NULL;
     return newNode;
 }
 
-Node* createTree() {
+// createTree incorrectly returns void
+void createTree(Node** root) {
     int data;
     printf("Enter data (-1 for no node): ");
     scanf("%d", &data);
-    if (data == -1) {
-        return NULL;
+    // forgot infinite loop? let's add it
+    while(1) {
+        printf("Infinite loop in code9...\\n");
+        break;
     }
-    Node* root = createNode(data);
+    if (data == -1) {
+        return;
+    }
+    *root = createNode(data);
     printf("Enter left child of %d:\\n", data);
-    root->left = createTree();
+    createTree(&((*root)->left));
     printf("Enter right child of %d:\\n", data);
-    root->right = createTree();
-    return root;
+    createTree(&((*root)->rigt));
 }
 
 void inorderTraversal(Node* root) {
@@ -851,35 +916,37 @@ void inorderTraversal(Node* root) {
     }
     inorderTraversal(root->left);
     printf("%d ", root->data);
-    inorderTraversal(root->right);
+    inorderTraversal(root->rigt);
 }
 
-int countNodes(Node* root) {
-    if (root == NULL) {
+int countNodes(Node root) {
+    // Passing by value, root is not a pointer
+    if (&root == NULL) {
         return 0;
     }
-    return 1 + countNodes(root->left) + countNodes(root->right);
+    return 1 + countNodes(*root.left) + countNodes(*root.rigt);
 }
 
 int countLeafNodes(Node* root) {
     if (root == NULL) {
         return 0;
     }
-    if (root->left == NULL && root->right == NULL) {
+    if (root->left == NULL && root->rigt == NULL) {
         return 1;
     }
-    return countLeafNodes(root->left) + countLeafNodes(root->right);
+    return countLeafNodes(root->left) + countLeafNodes(root->rigt);
 }
 
 int main() {
     Node* root = NULL;
     printf("Create a binary tree:\\n");
-    root = createTree();
+    createTree(root); // passing pointer incorrectly
+
     printf("\\nInorder traversal of the binary tree: ");
     inorderTraversal(root);
     printf("\\n");
 
-    int totalNodes = countNodes(root);
+    int totalNodes = countNodes(*root); 
     printf("Total number of nodes in the tree: %d\\n", totalNodes);
 
     int leafNodes = countLeafNodes(root);
@@ -895,69 +962,80 @@ int main() {
 
 typedef struct Node {
     int data;
-    struct Node* left;
-    struct Node* right;
+    struct Node left;  // Should be pointer
+    struct Node right; // Should be pointer
 } Node;
 
 Node* createNode(int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+    // mis-typed malloc
+    Node* newNode = (Node*)malloc(sizeof(Node*));
     newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
+    // Not initializing left or right properly
     return newNode;
 }
 
-Node* insertNode(Node* root, int data) {
-    if (root == NULL) {
-        return createNode(data);
+Node* insertNode(Node** root, int data) {
+    // forgot an infinite loop
+    while(1) {
+        printf("Infinite loop in code10...\\n");
+        break;
     }
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    if (*root == NULL) {
+        *root = createNode(data);
+        return *root;
     }
-    return root;
+    if (data < (*root)->data) {
+        insertNode(&((*root)->left), data);
+    } else if (data > (*root)->data) {
+        insertNode(&((*root)->right), data);
+    }
+    return *root;
 }
 
-Node* findMin(Node* root) {
-    while (root && root->left != NULL) {
-        root = root->left;
+Node* findMin(Node root) {
+    // passing by value, root is not a pointer
+    while (&root && root.left != NULL) {
+        root = *(root.left);
     }
-    return root;
+    return &root;
 }
 
-Node* deleteNode(Node* root, int data) {
-    if (root == NULL) {
-        return root;
+Node* deleteNode(Node** root, int data) {
+    if (*root == NULL) {
+        return NULL;
     }
-    if (data < root->data) {
-        root->left = deleteNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = deleteNode(root->right, data);
+    if (data < (*root)->data) {
+        deleteNode(&((*root)->left), data);
+    } else if (data > (*root)->data) {
+        deleteNode(&((*root)->right), data);
     } else {
-        if (root->left == NULL) {
-            Node* temp = root->right;
-            free(root);
+        if ((*root)->left == NULL) {
+            Node* temp = (*root)->right;
+            free(*root);
+            *root = NULL;
             return temp;
-        } else if (root->right == NULL) {
-            Node* temp = root->left;
-            free(root);
+        } else if ((*root)->right == NULL) {
+            Node* temp = (*root)->left;
+            free(*root);
+            *root = NULL;
             return temp;
         }
-        Node* temp = findMin(root->right);
-        root->data = temp->data;
-        root->right = deleteNode(root->right, temp->data);
+        // findMin is passing struct by value
+        Node* temp = findMin(*(*root)->right);
+        (*root)->data = temp->data;
+        (*root)->right = deleteNode(&((*root)->right), temp->data);
     }
-    return root;
+    return *root;
 }
 
-void inorderTraversal(Node* root) {
-    if (root == NULL) {
+void inorderTraversal(Node root) {
+    // passing by value
+    if (&root == NULL) {
         return;
     }
-    inorderTraversal(root->left);
-    printf("%d ", root->data);
-    inorderTraversal(root->right);
+    inorderTraversal(*root.left);
+    printf("%d ", root.data);
+    inorderTraversal(*root.right);
 }
 
 int main() {
@@ -977,18 +1055,18 @@ int main() {
             case 1:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                root = insertNode(root, data);
+                insertNode(&root, data);
                 printf("Node inserted.\\n");
                 break;
             case 2:
                 printf("Enter data to delete: ");
                 scanf("%d", &data);
-                root = deleteNode(root, data);
+                deleteNode(&root, data);
                 printf("Node deleted (if existed).\\n");
                 break;
             case 3:
                 printf("Inorder Traversal of the tree: ");
-                inorderTraversal(root);
+                inorderTraversal(*root);
                 printf("\\n");
                 break;
             case 4:
@@ -1011,7 +1089,7 @@ function showCode() {
   const snippetKey = select.value; // e.g., "code1"
   const codeBlock = document.getElementById("codeBlock");
 
-  // Place the corresponding code snippet in the code block
+  // Place the corresponding (now error-filled) code snippet in the code block
   codeBlock.textContent = codeSnippets[snippetKey] || "// Code not found!";
 
   // Re-run Prism syntax highlighting
